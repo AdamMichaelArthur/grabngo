@@ -1,0 +1,20 @@
+{
+  "name": "brokenaffiliatelinks",
+  "version": "1.0.0",
+  "description": "A tool that scans a website and finds broken affiliate links",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Adam Arthur",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.21.4",
+    "crawler": "^1.3.0",
+    "follow-redirects": "^1.14.4",
+    "node-html-crawler": "^1.2.3",
+    "prompts": "^2.4.1",
+    "request": "^2.88.2",
+    "voca": "^1.4.0"
+  }
+}
