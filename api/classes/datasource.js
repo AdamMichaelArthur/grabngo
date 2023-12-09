@@ -1680,6 +1680,7 @@ async function putSheetIntoDatabase(sheet, user, filter){
 
 	// Let's check and see if there are any preprocessors
 	console.log(1239, "Putting Sheet into database", filter);
+	console.log(1240, util.inspect(sheet.sheetname, false, null, true /* enable colors */));
 
 	var secondary_key = null;
 	var exclude_search = null;
@@ -1717,17 +1718,31 @@ async function putSheetIntoDatabase(sheet, user, filter){
 
 	var filterCpy = { ... filter }
 	delete filterCpy.validation;
+	console.log(1721, filter);
+
 	var model = mongoose.model(checkDatasource(sheet.collection_name))
+	console.log(1722, sheet.collection_name, sheet.sheetname);
+
+	if(filter.sheetNamesToDatasource == true){
+		model = mongoose.model(checkDatasource(sheet.sheetname))
+	}
+
 	var db = new mongo(model, user)
 	var docs = sheet.sheetdata;
 
-	console.log(1315, "inserting", docs.length, "records");
+	console.log(1315, "inserting", sheet.method, docs.length, "records");
+
+	if(typeof sheet.method == 'undefined'){
+		sheet.method = "update"
+	}
 
 	if(sheet.method == "update"){
 		var results = await db.mongoCreateManyOnDuplicateKeyUpdate(docs, filterCpy, sheet.primary_key, secondary_key, exclude_search, exclude_update);
+		console.log(1729, sheet.sheetname)
 		return { 'sheet': sheet.sheetname, 'writeresults': results };
 	}
 	if(sheet.method == "insert"){
+		console.log(1737, sheet.sheetname)
 		var results = await db.mongoCreateMany(docs, filterCpy, sheet.primary_key);
 		return { 'sheet': sheet.sheetname, 'writeresults': results };
 		return results;

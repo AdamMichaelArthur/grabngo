@@ -1,6 +1,7 @@
 var mongoose = require('mongoose');
 var moment = require('moment');
 const util = require("util");
+var voca = require("voca");
 /*
 	This is a helper class for Saas-Product specific MongoDB tasks.
 	As an example, every record has an "owner", "created_by", etc.
@@ -141,6 +142,7 @@ module.exports = class Mongo {
 
 		for(var i = 0; i < models.length; i++){
 			var model = models[i]
+			console.log(144, model)
 			var keys = Object.keys(model)
 			var values = Object.values(model)
 			if(keys.length == 0){
@@ -183,6 +185,8 @@ module.exports = class Mongo {
 				}
 			}
 
+
+
 			var filterCpy = { ... filter }
 
 			if(exclude_search != null){
@@ -204,6 +208,18 @@ module.exports = class Mongo {
 					update: { $set : { ... merged, ... filterCpy } },
 					upsert: true
 				}
+			}
+
+			for (const [key, value] of Object.entries(updateObj["updateOne"]["update"]["$set"])) {
+				console.log(214, key, value, updateObj["updateOne"]["update"]["$set"]);
+	  			if(voca.includes(key, "_id")){
+	  				console.log(216, key)
+	  				try {
+	  					updateObj["updateOne"]["update"]["$set"][key] = mongoose.Types.ObjectId(value)
+	  				} catch(err){
+	  					console.warn("Tried to convert", value, "to an object_id, but it failed");
+	  				}
+	  			}
 			}
 
 			bulkData.push(updateObj)

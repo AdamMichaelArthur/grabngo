@@ -1,9 +1,12 @@
+# Demo Project Files
+apiv2/2.0/endpoints/fooddeliveryapp'
+apiv2/2.0/endpoints/yourapp'
+
 # Local Files
 website/
 var/
 static/
 scrap/
-public/
 proxy/
 processes/
 postman_export/
@@ -13,6 +16,7 @@ howto/
 generators/
 dbbk/
 .angular/
+tools/
 app.saas-product.com
 test.js
 Guidelines.md
