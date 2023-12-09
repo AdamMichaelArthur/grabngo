@@ -31,16 +31,23 @@ export default class Authorization {
         this.req = res;
         this.res = res;
 
+        
+
         // Check and see if we have an authorization cookie
         var authHeader = req.cookies["Authorization"];
 
+        let AuthHeader;
+        if (typeof req.headers["Authorization"] !== 'undefined') { AuthHeader = req.headers["Authorization"]}
+        if (typeof req.headers["authorization"] !== 'undefined') { AuthHeader = req.headers["authorization"]}
+
         if (authHeader == null) {
             // If no Authorization cookie is present, check for an API Key. 
-            if (typeof req.headers["Authorization"] !== 'undefined') {
+            if (typeof AuthHeader !== 'undefined') {
                 // There's an authorization header
-                if (req.headers["Authorization"].indexOf("Bearer") !== -1) {
+
+                if (AuthHeader.indexOf("Bearer") !== -1) {
                     // We've got a bearer token
-                    return await checkBearerToken(req.headers["Authorization"])
+                    return await this.checkBearerToken(AuthHeader)
                 } else {
                     // we also support including an "api_key" in the header 
                     if (typeof req.headers["api_key"] !== 'undefined') {
@@ -117,8 +124,10 @@ export default class Authorization {
         } else { return this.errors.error("password", "Unable to change password"); }
     }
 
-    async checkBearerToken(bearerToken = '') {
-
+    async checkBearerToken(authHeader = '') {
+        let token = authHeader.split(' ')[1];
+        console.log(131, authHeader, token);
+        return this.checkApiKey(token)
     }
 
     async checkApiKey(api_key = '') {
@@ -282,17 +291,17 @@ export default class Authorization {
 
         // Derive the account type
         // "account" and "user" accounts are our default accounts, but you can define as many as you'd like, each with custom permissions and navigation
-        // if (this.database.user.account_type !== "account" && this.database.user.account_type !== "user") {
-        //     let acct;
-        //     var accountTypeClass = `acct = new global.Permissions${Voca.titleCase(Voca.camelCase(this.database.user.account_type))}Prototype()`;
-        //     eval(accountTypeClass)
+        if (this.database.user.account_type !== "account" && this.database.user.account_type !== "user") {
+            let acct;
+            var accountTypeClass = `acct = new global.Permissions${Voca.titleCase(Voca.camelCase(this.database.user.account_type))}Prototype()`;
+            eval(accountTypeClass)
            
-        //     if (acct.inheritParentMenus) {
-        //         obj.navigationMenuItems = obj.navigationMenuItems.concat(acct.navigationMenuItems);
-        //     } else {
-        //         obj.navigationMenuItems = acct.navigationMenuItems;
-        //     }
-        // }
+            if (acct.inheritParentMenus) {
+                obj.navigationMenuItems = obj.navigationMenuItems.concat(acct.navigationMenuItems);
+            } else {
+                obj.navigationMenuItems = acct.navigationMenuItems;
+            }
+        }
 
         //const sessionId = await this.genSessionId(this.pwd)
         //var authorizationString = this.genAuthorizationBasicString(this.database.user.accountId, this.database.user.sessionId, this.database.user._id)

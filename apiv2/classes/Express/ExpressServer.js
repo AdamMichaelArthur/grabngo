@@ -84,10 +84,10 @@ export default class ExpressServer extends Base {
 
     async startServer() {
         this.server = http.createServer(this.app);
-        this.server.listen(this.port);
-        this.server.timeout = this.timeout;
+        this.server.listen(this.port, '0.0.0.0');
+        this.server.timeout = this.timeout;  
 
-        console.log(`Server Listening on port ${this.port}`);
+        console.log(`Server Listening on port ${this.port} and 0.0.0.0`);
 
         this.app.use((req, res, next) => {
           var unifiedJS = []
@@ -207,7 +207,7 @@ export default class ExpressServer extends Base {
         }
 
         this.app.use(serviceName + "public", (req, res, next) => {
-                          console.log(582, "Here");
+                          console.log(582, req.body);
             res.locals.isPublic = true;
             next();
             // var base = new Base();
@@ -228,6 +228,7 @@ export default class ExpressServer extends Base {
             res.locals.base.errors.req = req;
             res.locals.base.errors.res = res;
             res.locals.base.response = new Response();
+
             res.locals.base.initRequestVariables(req, res);
 
             // Check for supported content-types
@@ -283,6 +284,7 @@ export default class ExpressServer extends Base {
         });
 
         this.app.use(serviceName + "authorize", async (req, res, next) => {
+            console.log(292, serviceName)
             const authorizationResult = await res.locals.base.authorize(req, res);
             if(authorizationResult === true){
               res.status(200);

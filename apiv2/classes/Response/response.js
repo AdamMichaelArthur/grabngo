@@ -12,9 +12,11 @@ export default class Response{
 	constructor(){
 		this.responseStatus = 200;
 		this.responsePackage = this.successResponse
+		this.language = 'en'
 	}
 
 	reply(data ='', status =200){
+
 		if(typeof data == "string"){
 			data = { result: data }
 		}
@@ -29,7 +31,8 @@ export default class Response{
 
 		var response = {
 			... this.successResponse,
-			... data
+			... data,
+			... { language: this.language }
 		}
 		
 		//console.log(3551, this.res.locals.user, this.res.locals.userAccount);

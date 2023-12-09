@@ -18,13 +18,15 @@ export default class DatabaseConnection {
 	directConnection = process.env.directConnection
 	callback = null;
 	
-	constructor(callback){
+
+	constructor(callback, altCallback =() => { }){
 		if(global.isDatabaseConnected == false){
 			this.callback = callback;
 			this.connection_uri = 'mongodb://'+this.username+':'+ this.password+'@'+ this.domain+':'+ this.port+'/'+ this.dbname + '?authSource=admin' + '&socketTimeoutMS=' + 
 			this.socketTimeout + '&connectTimeoutMS=' + this.connectionTimeout + 'replicaSet=rs0' + '&directConnection=' + this.directConnection;
 			console.log(this.connection_uri);
 			this.client = new MongoClient(this.connection_uri, { useNewUrlParser: true, useUnifiedTopology: true });
+			this.websocketCallback = altCallback
 			this.connect();
 		} else {
 			this.callback = callback;
@@ -46,6 +48,7 @@ export default class DatabaseConnection {
 		    console.log("Connected successfully to MongoDB");
 		    global.isDatabaseConnected = true;
 		    global.databaseConnection = this;
+		    this.websocketCallback(this.db);
 		} catch (error) {
 		    this.handleException(error);
 		}

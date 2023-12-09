@@ -178,7 +178,7 @@ export default class Stripe extends Base {
     for(let plan of availablePlans.plans){
       if(Voca.lowerCase(plan.displayName) === Voca.lowerCase("free")){
         // We've got a matching plan
-        //console.log(82, plan.displayName, plan.prices);
+
         curPlan = plan;
         planPriceId = plan.prices[0]["id"];
         break;

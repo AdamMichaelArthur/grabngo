@@ -9,11 +9,11 @@ import Voca from 'voca'
 
 var Browser; 
 
-puppeteer.launch({ headless: "new",  timeout: 0 })
-  .then((browser) => {
-    // Use the browser instance here
-    Browser = browser;
-  })
+// puppeteer.launch({ headless: "new",  timeout: 0 })
+//   .then((browser) => {
+//     // Use the browser instance here
+//     Browser = browser;
+//   })
 
 export default class Chatgpt extends Base {
 

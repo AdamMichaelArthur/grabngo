@@ -62,9 +62,9 @@ export default class Mongo extends Database {
 
 	}
 
-	constructor(){
+	constructor(altCallback =() => { } ){
 		super();
-		this.connection = new Connection(this);
+		this.connection = new Connection(this, altCallback );
 	}
 
 	connected(){
@@ -90,7 +90,10 @@ export default class Mongo extends Database {
 	}
 
 	async findOne(query ={}, coll ='', projection = { projection: { "_id": 1} }){
-		//console.log(35, this.user._id);
+
+
+
+
 		try {
 			var result = await this.db.collection(coll).findOne(query, projection);
 		} catch(err){

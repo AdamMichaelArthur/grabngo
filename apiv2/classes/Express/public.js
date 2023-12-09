@@ -10,7 +10,7 @@ import Voca from 'voca'
 import Errors from '../Errors/errors.js'
 import DatabaseConnection from '../Database/Mongo/mongo.js'
 import Response from '../Response/response.js';
-
+import Language from './language.js';
 /*
 	This class handles all public routes.
 
@@ -27,7 +27,7 @@ export default class PublicRoutes extends Base {
 
     constructor(initializers) {
         super(initializers);
-
+        this.language = new Language();
         this.filenames = [];
     }
 
@@ -119,6 +119,7 @@ export default class PublicRoutes extends Base {
 
             // If the directory is empty, we're move on -- nothing to do here.
             if(dirComponents.length == 0){
+                console.log(125, "Cintinuing")
                 continue;
             }
 
@@ -142,7 +143,6 @@ export default class PublicRoutes extends Base {
             }
         }
 
-        
         var matchingPaths = [];
         Object.keys(winner).forEach(function(key) {
           const filePathComponents = path.parse(key);
@@ -173,6 +173,7 @@ export default class PublicRoutes extends Base {
                 break;
             }
         }
+
 
         const route = urlStr.slice(0, idx + matchingPath.length);
         var t = urlStr.indexOf("/", idx+matchingPath.length+1);
@@ -224,6 +225,8 @@ export default class PublicRoutes extends Base {
         }
 
         console.log(226)
+        this.initRequestVariables(req, res);
+        this.res = res;
         next();
     });
 
@@ -273,8 +276,6 @@ export default class PublicRoutes extends Base {
         var functionParams = this.getFunctionParameters(functionName);
         var parameterStr = this.getParameterStr(body, functionParams);
 
-        console.log(522, "here", parameterStr);
-        
         res.locals.parameterStr = parameterStr
 
 
@@ -317,8 +318,9 @@ export default class PublicRoutes extends Base {
                 if (result === false) {
                     return obj.errors.error("request_failed");
                 }
-                res.status(obj.response.responseStatus);
-                res.json(obj.response.responsePackage);
+                //res.status(obj.response.responseStatus);
+                //res.json(obj.response.responsePackage);
+                this.language.sendPackage(req, res, obj.response.responsePackage)
             });  
 
         } else {
@@ -334,8 +336,9 @@ export default class PublicRoutes extends Base {
                     return obj.errors.error("request_failed", "Request failed, no specific reason provided");
                 }
                 
-                res.status(obj.response.responseStatus);
-                res.json(obj.response.responsePackage);
+                //res.status(obj.response.responseStatus);
+                //res.json(obj.response.responsePackage);
+                this.language.sendPackage(req, res, obj.response.responsePackage)
         };
 
         if(typeof functionName.timeout !== 'undefined'){

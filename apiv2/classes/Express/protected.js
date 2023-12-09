@@ -10,6 +10,7 @@ import Voca from 'voca'
 import Errors from '../Errors/errors.js'
 import DatabaseConnection from '../Database/Mongo/mongo.js'
 import Response from '../Response/response.js';
+import Language from './language.js'
 
 /*
 	This class handles all protected routes.
@@ -30,6 +31,7 @@ export default class ProtectedRoutes extends Base {
     constructor(initializers) {
         super(initializers);
         this.filenames = [];
+        this.language = new Language();
     }
 
     async handleProtectedRoutes() {
@@ -545,8 +547,8 @@ export default class ProtectedRoutes extends Base {
         obj.response.responsePackage.userInfo['balance'] = res.locals.userAccount.balance;
         obj.response.responsePackage.userInfo['points'] = res.locals.userAccount.points;
 
-        res.status(200);
-        res.json(obj.response.responsePackage);
+
+        this.language.sendPackage(req, res, obj.response.responsePackage)
         
     })
 
@@ -582,8 +584,7 @@ export default class ProtectedRoutes extends Base {
 
         responsePackage.responsePackage.count = count;
         
-        res.status(200);
-        res.json(responsePackage.responsePackage);
+        this.language.sendPackage(req, res, obj.response.responsePackage)
     });
 
     this.app.use("/messages", async (req, res, next) => {
@@ -601,8 +602,7 @@ export default class ProtectedRoutes extends Base {
         responsePackage.responsePackage.messages = notifications;
         responsePackage.responsePackage.count = count;
         
-        res.status(200);
-        res.json(responsePackage.responsePackage);
+        this.language.sendPackage(req, res, obj.response.responsePackage)
     });    
 
     this.app.use("/events", async (req, res, next) => {
@@ -613,8 +613,7 @@ export default class ProtectedRoutes extends Base {
         
         responsePackage.responsePackage.events = [ { "test":true } ];
         
-        res.status(200);
-        res.json(responsePackage.responsePackage);
+        this.language.sendPackage(req, res, obj.response.responsePackage)
     });  
 
     // By the time we get here, some plans may restrict how often a class or endpoint can be called

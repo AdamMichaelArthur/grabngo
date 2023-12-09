@@ -64,6 +64,7 @@ export default class Base extends Events {
         this.errors.req = this.req;
         this.response.res = this.res;
         this.response.req = this.req;
+        this.response.language = 'en';
         this.body = { ... this.req.body };
         this.transform = false;
         this.user_id = this.res.locals.user_id;
@@ -229,7 +230,6 @@ export default class Base extends Events {
                     if(this.body[optionalKey] == "true"){
                         this.body[optionalKey] = true;
                     if(this.body[optionalKey] == "false"){
-                        console.log(220, optionalKey, this.body[optionalKey])
                         this.body[optionalKey] = false;
                     }
                 }}
@@ -489,7 +489,11 @@ export default class Base extends Events {
                   try {
                       var defaultValue = paramName[1].split("=");
                   } catch(err){
-                      return res.locals.base.errors.error('default', `The function that implements ${className}.${endpoint} is not compliant with coding patterns.  Every function parameter requires a default parameter in its declaration.`);
+                        console.log(493, this.className, this.endpoint)
+                        let errors = new Errors();
+                        errors.res = this.res;
+                        errors.req = this.req;
+                      return errors.error('default', `The function that implements ${this.className}.${this.endpoint} is not compliant with coding patterns.  Every function parameter requires a default parameter in its declaration.`);
                   }
 
                   defaultValue = defaultValue[1];

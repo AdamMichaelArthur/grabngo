@@ -7,7 +7,7 @@ import Sysadmin from "@plans/sysadmin/sysadmin.js"
  * @extends Sysadmin
  *
  *
- * This class defines endpoints that will allow a syste administrator to edit plans
+ * This class defines endpoints that will allow a system administrator to edit plans
  * Ideally, this class is one that will not require customization.  If you need to create
  * a new plan, please see the documentation before 
  *
