@@ -2,6 +2,7 @@
 apiv2/2.0/endpoints/fooddeliveryapp'
 apiv2/2.0/endpoints/yourapp'
 
+**/.env
 # Local Files
 website/
 var/

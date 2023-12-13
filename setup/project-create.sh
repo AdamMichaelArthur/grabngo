@@ -80,7 +80,7 @@ cd hooks || exit
 sudo touch post-receive
 
 # create a post-receive file
-sudo tee post-receive <<EOF
+sudo tee post-receive >/dev/null <<EOF
 #!/bin/bash
 
 # The production directory
@@ -121,7 +121,4 @@ EOF
 sudo chmod +x post-receive
 
 echo "- git:" "$GIT"
-echo "- tmp:" "$TMP"
-echo "- www:" "$WWW"
-echo "- env:" "$ENV"
 echo "Git Remote Initialized Properly"
