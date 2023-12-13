@@ -2,6 +2,14 @@
 
 #!/bin/bash
 
+read -p "Enter Project Name: " answer
+
+chmod +x ./setup/create-project.sh
+
+./setup/project-create.sh "$answer"
+
+exit;
+
 # Detecting the operating system
 OS_TYPE=$(uname -s)
 
@@ -55,9 +63,6 @@ fi
 read -p "What is the domain you pointed the A Record to? (enter to create one)" answer
 
 exit;
-
-
-
 
 # Find the public IP address of the device
 public_ip=$(ip route get 1.2.3.4 | awk '{print $7}' | head -n 1)
@@ -226,9 +231,6 @@ case "$OS" in
 esac
 
 echo "MongoDB is running."
-
-echo "Enter Project Name:"
-read projectName
 
 # Informing the user about the system administrator requirement
 echo "SaaS Product requires an initial user to be the system administrator."
